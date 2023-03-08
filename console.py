@@ -1,10 +1,10 @@
-#!/usr/bin/env python3
+#!/usr/bin/python3
 """Writing line-oriented command interpreters"""
 import cmd
 
 class HBNBcommand(cmd.Cmd):
     """Creating a simple line-oriented commands"""
-    prompt = '(hbnb)'
+    prompt = '(hbnb) '
 
     def do_EOF(self, line):
         """End of file to exit the program"""
