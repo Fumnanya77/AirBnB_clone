@@ -6,7 +6,7 @@ from datetime import datetime
 
 class BaseModel:
     """Base class for other classes"""
-    def __init__(self):
+    def __init__(self, *args, **kwargs):
         """
           Initialising the id and updated time of instances
         """
