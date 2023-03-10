@@ -22,5 +22,3 @@ class FileStorage:
         """
         key = obj.__class__.__name__ + '.' + obj.id
         FileStorage.__object[key] = obj
-
-
