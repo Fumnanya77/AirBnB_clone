@@ -10,12 +10,12 @@ class FileStorage:
     deserialisies a json file to an object
 
     """
-    __file_path = "file.path"
+    __file_path = "file.json"
     __objects = {}
 
     def all(self):
         """returns a dictionary of all the objects"""
-        return FileStorage.__object
+        return FileStorage.__objects
     
     def new(self, obj):
         """
@@ -27,20 +27,46 @@ class FileStorage:
     def save(self):
         """serializes the __object to the json file"""
         serialized_objs = {}
-        for key, value in FileStorage.__object.items():
+        for key, value in FileStorage.__objects.items():
             serialized_objs[key] = value.to_dict()
 
         with open(FileStorage.__file_path, 'w', encoding='utf-8') as f:
             json.dump(serialized_objs, f)
 
+    def classes(self):
+        """A list of valid classes"""
+        from models.base_model import BaseModel
+        classes = {"BaseModel": BaseModel}
+        return classes
+
     def reload(self):
-        """Deserializes a json file to __object"""
-        if path.isfile(FileStorage.__file_path):
-            with open(FileStorage.__file_path, 'r', encoding='utf-8') as f:
-                deserialized_obj = json.load(f)
-            for key, value in deserialized_obj.items():
-                class_name, obj_id = key.split('.')
-                print(type(value))
-                obj = eval(class_name)(**obj_dict)
-                self.__objects[key] = obj
-            return FileStorage.__object
+       """Reloads the stored objects from the json file"""
+       if not path.isfile(FileStorage.__file_path):
+           return
+
+       # Load the serialized object from the json file
+
+       with open(FileStorage.__file_path, "r", encoding="utf-8") as f:
+           serialized_objects =json.load(f)
+
+       #Create a dictionary to hold the serialized objects
+       deserialized_objects = {}
+
+       #iterate over the serialized objects and deserialize them
+       for obj_id, serialized_obj in serialized_objects.items():
+           class_name = serialized_obj['__class__']
+
+           #Look up the class object from the class name
+           if class_name in self.classes():
+               obj_class = self.classes()[class_name]
+           else:
+               #if the class is not define, skip
+               continue
+
+           # Make a new object from the serialized representation
+           deserialized_obj = obj_class(**serialized_obj)
+
+           #store the deserialized objects in a dictionary
+           deserialized_objects[obj_id] = deserialized_obj
+
+       FileStorage.__objects = deserialized_objects
