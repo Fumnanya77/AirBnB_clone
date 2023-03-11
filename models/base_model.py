@@ -5,7 +5,9 @@ import uuid
 from datetime import datetime
 from models import storage
 
+
 class BaseModel:
+
     """Base class for other classes"""
     def __init__(self, *args, **kwargs):
         """
@@ -27,7 +29,8 @@ class BaseModel:
         """
           Makes the attribute as strings
         """
-        return ("[{}] ({}) {}".format(self.__class__.__name__, self.id, self.__dict__))
+        return "[{}] ({}) {}".\
+            format(__class__.__name__, self.id, self.__dict__)
 
     def save(self):
         """
@@ -35,7 +38,7 @@ class BaseModel:
         """
         self.updated_at = datetime.now()
         storage.save()
-    
+
     def to_dict(self):
         dict_copy = self.__dict__.copy()
         dict_copy["__class__"] = self.__class__.__name__
