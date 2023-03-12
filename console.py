@@ -92,6 +92,28 @@ class HBNBcommand(cmd.Cmd):
                 storage.save()
             else:
                 print("** no instance found **")
+    def do_all(self, line):
+        """Usage 1. all | all <class_name>
+           Function: prints the string representation of all instances
+        """
+        instance_obj = storage.all
+        instance_list = []
+
+        if line == "" or line is None:
+            for key, value in storage.all().items():
+                instance_list.append(str(value))
+            print_instance(list)
+
+        else:
+            if line is not in storage.classes():
+                print("** class doesn't exist **")
+            else:
+                for key, value in storage.all().items():
+                    class_name, instance_id = key.split(".")
+                    if line == class_name:
+                        instance_list.append(str(value))
+                print(instance_list)
+
 
 if __name__ == '__main__':
     HBNBcommand().cmdloop()
