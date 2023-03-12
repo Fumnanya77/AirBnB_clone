@@ -10,8 +10,12 @@ class BaseModel:
 
     """Base class for other classes"""
     def __init__(self, *args, **kwargs):
-        """
-          Initialising the id and updated time of instances
+        """Initialising the id and updated time of instances
+
+        Args:
+            args(string): Unused
+            kwargs(dict): A dictionary of keys and values declared during
+                            instantiation.
         """
         if kwargs:
             for key, value in kwargs.items():

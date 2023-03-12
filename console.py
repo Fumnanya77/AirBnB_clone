@@ -7,6 +7,7 @@ from models import base_model
 from models.base_model import BaseModel
 from models.engine.file_storage import FileStorage
 
+
 class HBNBcommand(cmd.Cmd):
     """Creating a simple line-oriented commands"""
     prompt = '(hbnb) '
@@ -15,7 +16,7 @@ class HBNBcommand(cmd.Cmd):
         """Create new instances of `BaseModel` and store in JSON file"""
         if line == "":
             print("** class name missing **")
-        elif not line in dir(base_model):
+        elif line not in dir(base_model):
             print("** class doesn\'t exist **")
         elif line in dir(base_model):
             print(line)
@@ -38,6 +39,7 @@ class HBNBcommand(cmd.Cmd):
         if self.lastcmd:
             self.lastcmd = ""
             return self.onecmd('\n')
+
 
 if __name__ == '__main__':
     HBNBcommand().cmdloop()
