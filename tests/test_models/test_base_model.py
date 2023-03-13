@@ -25,8 +25,10 @@ class TestBaseModel(unittest.TestCase):
     def test_save(self):
         """To test the save method"""
         self.assertIsInstance(self.obj.updated_at, datetime)
-        self.assertFalse(self.obj.save(), "")
+        self.assertNotEqual(self.obj.save(), "")
         self.assertNotEqual(self.obj.updated_at, self.obj.save())
+#        self.assertEqual(self.obj.save(), self.obj.updated_at)
+        self.assertEqual(self.obj.save(), None)
 
     def test_to_dict(self):
         """Testing the `dict` method"""
