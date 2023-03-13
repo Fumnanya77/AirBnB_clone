@@ -50,7 +50,7 @@ class FileStorage:
             return
 
         with open(FileStorage.__file_path, "r", encoding="utf-8") as f:
-            serialized_objects =json.load(f)
+            serialized_objects = json.load(f)
 
         deserialized_objects = {}
 

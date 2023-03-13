@@ -11,20 +11,6 @@ class HBNBcommand(cmd.Cmd):
     """Creating a simple line-oriented commands"""
     prompt = '(hbnb) '
 
-    def do_create(self, line):
-        """Create new instances of `BaseModel` and store in JSON file"""
-        if line == "":
-            print("** class name missing **")
-        elif line not in dir(base_model):
-            print("** class doesn\'t exist **")
-        elif line in dir(base_model):
-            print(line)
-            obj = FileStorage.new(self, json.loads(line))
-            print(obj)
-            obj = FileStorage.save(self)
-            print(obj)
-            print(obj.id)
-
     def do_EOF(self, line):
         """End of file to exit the program"""
         return True
@@ -38,20 +24,19 @@ class HBNBcommand(cmd.Cmd):
         if self.lastcmd:
             self.lastcmd = ""
             return self.onecmd('\n')
-    
+
     def do_create(self, line):
-        """Usage: create <class_name>, Function: creates an instance of a class"""
+        """Usage:create<class_name>,Function:creates an instance of a class"""
         if line != "" or line is not None:
             if line not in storage.classes():
                 print("** class doesn't exist **")
             else:
-                #Create an instance of the given class
                 new_obj = storage.classes()[line]()
                 new_obj.save()
                 print(new_obj.id)
         else:
             print("** class name missing **")
-    
+
     def do_show(self, line):
         """Usage: show <class_name> <id>
            Funtion: shows object at that id
@@ -92,6 +77,7 @@ class HBNBcommand(cmd.Cmd):
                 storage.save()
             else:
                 print("** no instance found **")
+
     def do_all(self, line):
         """Usage 1. all | all <class_name>
            Function: prints the string representation of all instances
