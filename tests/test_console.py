@@ -13,5 +13,5 @@ class TestHBNBCommand(unittest.TestCase):
 #    def test_update(self):
 
 
-if __name__ = '__main__':
+if __name__ == '__main__':
     unittest.main()
