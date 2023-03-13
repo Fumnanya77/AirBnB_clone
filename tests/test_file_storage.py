@@ -1,11 +1,10 @@
 #!/usr/bin/python3
-"""Test Case for the `FileStorage`"""
-
+"""Test Cases for the `FileStorage` class"""
 import unittest
 import sys
-sys.path.append('../../AirBnB_clone')
 from models.base_model import BaseModel
 from models.engine.file_storage import FileStorage
+sys.path.append('../../AirBnB_clone')
 
 
 class TestFileStorage(unittest.TestCase):

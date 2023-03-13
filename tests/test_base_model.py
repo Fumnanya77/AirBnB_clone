@@ -1,11 +1,10 @@
 #!/usr/bin/python3
-"""Test Case for the `BaseModel`"""
-
+"""Test cases for the `BaseModel` class"""
 import unittest
 import sys
-sys.path.append('../../AirBnB_clone')
 from models.base_model import BaseModel
 from datetime import datetime
+sys.path.append('../../AirBnB_clone')
 
 
 class TestBaseModel(unittest.TestCase):
