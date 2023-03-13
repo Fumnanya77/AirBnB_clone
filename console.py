@@ -13,20 +13,6 @@ class HBNBcommand(cmd.Cmd):
     """Creating a simple line-oriented commands"""
     prompt = '(hbnb) '
 
-    def do_create(self, line):
-        """Create new instances of `BaseModel` and store in JSON file"""
-        if line == "":
-            print("** class name missing **")
-        elif line not in dir(base_model):
-            print("** class doesn\'t exist **")
-        elif line in dir(base_model):
-            print(line)
-            obj = FileStorage.new(self, json.loads(line))
-            print(obj)
-            obj = FileStorage.save(self)
-            print(obj)
-            print(obj.id)
-
     def do_EOF(self, line):
         """End of file to exit the program"""
         return True
@@ -45,7 +31,8 @@ class HBNBcommand(cmd.Cmd):
         """Usage: create <class_name>,
            Function: creates an instance of a class
         """
-        if line != "" or line is not None:
+        print(line)
+        if line != "" and line is not None:
             if line not in storage.classes():
                 print("** class doesn't exist **")
             else:
