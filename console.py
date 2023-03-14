@@ -45,7 +45,7 @@ class HBNBcommand(cmd.Cmd):
            Funtion: shows object at that id
         """
         args = line.split(" ")
-        if len(args) == 0:
+        if len(args) == 0 or args[0] == '' or args[0] is None:
             print("** class name missing **")
         elif args[0] not in storage.classes():
             print("** class doesn't exist **")
@@ -65,7 +65,7 @@ class HBNBcommand(cmd.Cmd):
            Funtion: deletes object at that id
         """
         args = line.split(" ")
-        if len(args) == 0:
+        if len(args) == 0 or args[0] == '' or args[0] is None:
             print("** class name missing **")
         elif args[0] not in storage.classes():
             print("** class doesn't exist **")
@@ -148,7 +148,6 @@ class HBNBcommand(cmd.Cmd):
                 setattr(storage.all()[key], attribute, value)
                 storage.all()[key].save
 
-
     def precmd(self, line):
         # make the app work non-interactively
         if not sys.stdin.isatty():
@@ -180,6 +179,7 @@ class HBNBcommand(cmd.Cmd):
 
         return cmd.Cmd.precmd(self, line)
         # return ''
+
 
 if __name__ == '__main__':
     HBNBcommand().cmdloop()
