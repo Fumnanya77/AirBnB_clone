@@ -28,6 +28,11 @@ class HBNBcommand(cmd.Cmd):
             return self.onecmd('\n')
 
     def do_create(self, line):
+        """Usage:create<class_name>,Function:creates an instance of a class"""
+        if line != "" or line is not None:
+            if line not in storage.classes():
+                print("** class doesn't exist **")
+            else:
         """Usage: create <class_name>,
            Function: creates an instance of a class
         """
