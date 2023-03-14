@@ -97,37 +97,32 @@ class HBNBcommand(cmd.Cmd):
             print(new_list)
 
     def do_update(self, line):
-        '''Usage: 1. update <class name> <id> <attribute> <value> | \
-        2. <class name>.update(<id> <attribute> <value>) \
-        3. update <clas name> <id> <dictionary> \
-        4. <class name>.update(<id> <dictionary>) \
-        Function: Updates the instance of the class
-        '''
-
+        """Updates an instance by adding or updating attribute.
+        """
         if line == "" or line is None:
-            print("** class name missing**")
+            print("** class name missing **")
             return
 
-        regex = r'^(\S+)(?:\s(\S+)(?:\s(\S+)(?:\s((?:"[^"]*")|(?:(\S)+)))?)?)?'
-        matched = re.search(regex, line)
-        classname = matched.group(1)
-        uid = matched.group(2)
-        attribute = matched.group(3)
-        value = matched.group(4)
-        if not matched:
+        rex = r'^(\S+)(?:\s(\S+)(?:\s(\S+)(?:\s((?:"[^"]*")|(?:(\S)+)))?)?)?'
+        match = re.search(rex, line)
+        classname = match.group(1)
+        uid = match.group(2)
+        attribute = match.group(3)
+        value = match.group(4)
+        if not match:
             print("** class name missing **")
         elif classname not in storage.classes():
-            print("** class name doesn't exist **")
+            print("** class doesn't exist **")
         elif uid is None:
             print("** instance id missing **")
         else:
-            key = "().()".format(classname, uid)
+            key = "{}.{}".format(classname, uid)
             if key not in storage.all():
                 print("** no instance found **")
             elif not attribute:
                 print("** attribute name missing **")
             elif not value:
-                print("*** value missing **")
+                print("** value missing **")
             else:
                 cast = None
                 if not re.search('^".*"$', value):
@@ -144,9 +139,9 @@ class HBNBcommand(cmd.Cmd):
                     try:
                         value = cast(value)
                     except ValueError:
-                        pass
+                        pass  # fine, stay a string then
                 setattr(storage.all()[key], attribute, value)
-                storage.all()[key].save
+                storage.all()[key].save()
 
     def precmd(self, line):
         # make the app work non-interactively
