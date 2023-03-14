@@ -29,14 +29,6 @@ class HBNBcommand(cmd.Cmd):
 
     def do_create(self, line):
         """Usage:create<class_name>,Function:creates an instance of a class"""
-        if line != "" or line is not None:
-            if line not in storage.classes():
-                print("** class doesn't exist **")
-            else:
-        """Usage: create <class_name>,
-           Function: creates an instance of a class
-        """
-        print(line)
         if line != "" and line is not None:
             if line not in storage.classes():
                 print("** class doesn't exist **")
@@ -106,36 +98,55 @@ class HBNBcommand(cmd.Cmd):
 
     def do_update(self, line):
         '''Usage: 1. update <class name> <id> <attribute> <value> | \
-2. <class name>.update(<id> <attribute> <value>) \
-3. update <clas name> <id> <dictionary> \
-4. <class name>.update(<id> <dictionary>) \
-Function: Updates the instance of the class
+        2. <class name>.update(<id> <attribute> <value>) \
+        3. update <clas name> <id> <dictionary> \
+        4. <class name>.update(<id> <dictionary>) \
+        Function: Updates the instance of the class
         '''
 
-    if line == "" or line is None:
-        print("** class name missing**")
-        return
+        if line == "" or line is None:
+            print("** class name missing**")
+            return
 
-    regex = r'^(\S+)(?:\s(\S+)(?:\s(\S+)(?:\s((?:"[^"]*")|(?:(\S)+)))?)?)?'
-    matched = re.search(regex, line)
-    classname = matched.group(1)
-    uid = matched.group(2)
-    attribute = matched.group(3)
-    value = matched.group(4)
-    if not matched:
-        print("** class name missing **")
-    elif classname not in storage.classes():
-        print(**" class name doesn't exist **")
-    elif uid is None:
-        print("** instance id missing **")
-    else:
-        key = "().()".format(classname, uid)
-        if key not in storage.all():
-            print("** no instance found **")
-        elif not attribute:
-            print("** attribute name missing **")
-        elif not value:
-            print("*** value missing **")
+        regex = r'^(\S+)(?:\s(\S+)(?:\s(\S+)(?:\s((?:"[^"]*")|(?:(\S)+)))?)?)?'
+        matched = re.search(regex, line)
+        classname = matched.group(1)
+        uid = matched.group(2)
+        attribute = matched.group(3)
+        value = matched.group(4)
+        if not matched:
+            print("** class name missing **")
+        elif classname not in storage.classes():
+            print(**" class name doesn't exist **")
+        elif uid is None:
+            print("** instance id missing **")
+        else:
+            key = "().()".format(classname, uid)
+            if key not in storage.all():
+                print("** no instance found **")
+            elif not attribute:
+                print("** attribute name missing **")
+            elif not value:
+                print("*** value missing **")
+            else:
+                cast = None
+                if not re.search('^".*"$', value):
+                    if '.' in value:
+                        cast = float
+                    else:
+                        cast = int
+                else:
+                    value = value.replace('"', '')
+                attributes = storage.attributes()[classname]
+                if attribute in attributes:
+                    value = attributes[attribute](value)
+                elif cast:
+                    try:
+                        value = cast(value)
+                    except ValueError:
+                        pass
+                setattr(storage.all()[key], attribute, value)
+                storage.all()[key].save
 
 
     def precmd(self, line):
