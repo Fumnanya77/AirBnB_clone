@@ -36,10 +36,17 @@ class TestFileStorage(unittest.TestCase):
 
     def test_save(self):
         """Test the `save` method of the class"""
+        save_obj = FileStorage.save(self)
+#        self.assertTrue(save_obj)
 #        self.assertIsInstance(self.file_obj.save().serialized_obj, dict)
+#        self.assertIsInstance(save_obj, dict)
+        self.assertEqual(save_obj, None)
 
     def test_reload(self):
         """Test the `reload` method"""
+#        reload_obj = FileStorage.reload(self)
+#        self.assertTrue(reload_obj)
+#        self.assertEqual(reload_obj, {...})
 
 
 if __name__ == '__main__':
