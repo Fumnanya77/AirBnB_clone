@@ -106,76 +106,32 @@ class HBNBcommand(cmd.Cmd):
 4. <class name>.update(<id> <dictionary>) \
 Function: Updates the instance of the class
         '''
-        checks = re.search(r"^(\w+)\s([\S]+?)\s({.+?})$", line)
-        if checks:
-            # it is a dictionary
-            class_name = checks.group(1)
-            instance_id = checks.group(2)
-            update_dict = checks.group(3)
 
-            if class_name is None:
-                print("** class name missing **")
-            elif instance_id is None:
-                print("** instance id missing **")
-            elif update_dict is None:
-                print("** attribute name missing **")
-            else:
-                if class_name not in storage.classes():
-                    print("** class doesn't exist **")
-                else:
-                    key = f"{class_name}.{instance_id}"
-                    if key not in storage.all():
-                        print("** no instance found **")
-                    else:
-                        instance_dict = storage.all()[key]
-                        update_dict = json.loads(update_dict)
+    if line == "" or line is None:
+        print("** class name missing**")
+        return
 
-                        attributes = storage.attributes()[class_name]
-                        # print(attributes)
-                        for key, value in update_dict.items():
-                            if key in attributes:
-                                # print(key)
-                                value = attributes[key](value)
-                                # print(attributes[key])
-                                setattr(instance_dict, key, value)
-                                storage.save()
+    regex = r'^(\S+)(?:\s(\S+)(?:\s(\S+)(?:\s((?:"[^"]*")|(?:(\S)+)))?)?)?'
+    matched = re.search(regex, line)
+    classname = matched.group(1)
+    uid = matched.group(2)
+    attribute = matched.group(3)
+    value = matched.group(4)
+    if not matched:
+        print("** class name missing **")
+    elif classname not in storage.classes():
+        print(**" class name doesn't exist **")
+    elif uid is None:
+        print("** instance id missing **")
+    else:
+        key = "().()".format(classname, uid)
+        if key not in storage.all():
+            print("** no instance found **")
+        elif not attribute:
+            print("** attribute name missing **")
+        elif not value:
+            print("*** value missing **")
 
-        else:
-            # it isn't a dictionary
-            checks = re.search(
-                r"^(\w+)\s([\S]+?)\s\"(.+?)\"\,\s\"(.+?)\"", line)
-            class_name = checks.group(1)
-            instance_id = checks.group(2)
-            attribute = checks.group(3)
-            value = checks.group(4)
-
-            if class_name is None:
-                print("** class name missing **")
-            elif instance_id is None:
-                print("** instance id missing **")
-            elif attribute is None:
-                print("** attribute name missing **")
-            elif value is None:
-                print("** value missing **")
-            else:
-                #  check if class exists
-                if class_name not in storage.classes():
-                    print("** class doesn't exist **")
-                else:
-                    key = f"{class_name}.{instance_id}"
-                    if key not in storage.all():
-                        print("** no instance found **")
-                    else:
-                        instance_dict = storage.all()[key]
-                        # print(instance_dict)
-                        attributes_dict = storage.attributes()[class_name]
-                        # update attributes in the instance dictionary
-                        # print(attributes_dict[attribute])
-                        value = attributes_dict[attribute](
-                            value)  # type casting
-                        # print(attribute, value)
-                        setattr(instance_dict, attribute, value)
-                        storage.save()
 
     def precmd(self, line):
         # make the app work non-interactively
