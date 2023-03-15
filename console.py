@@ -12,6 +12,42 @@ class HBNBcommand(cmd.Cmd):
 
     """Creating a simple line-oriented commands"""
     prompt = '(hbnb) '
+    def default(self, line):
+        """Catch commands if nothing else matches then."""
+        # print("DEF:::", line)
+        self._precmd(line)
+
+    def _precmd(self, line):
+        """Intercepts commands to test for class.syntax()"""
+        # print("PRECMD:::", line)
+        match = re.search(r"^(\w*)\.(\w+)(?:\(([^)]*)\))$", line)
+        if not match:
+            return line
+        classname = match.group(1)
+        method = match.group(2)
+        args = match.group(3)
+        match_uid_and_args = re.search('^"([^"]*)"(?:, (.*))?$', args)
+        if match_uid_and_args:
+            uid = match_uid_and_args.group(1)
+            attr_or_dict = match_uid_and_args.group(2)
+        else:
+            uid = args
+            attr_or_dict = False
+
+        attr_and_value = ""
+        if method == "update" and attr_or_dict:
+            match_dict = re.search('^({.*})$', attr_or_dict)
+            if match_dict:
+                self.update_dict(classname, uid, match_dict.group(1))
+                return ""
+            match_attr_and_value = re.search(
+                '^(?:"([^"]*)")?(?:, (.*))?$', attr_or_dict)
+            if match_attr_and_value:
+                attr_and_value = (match_attr_and_value.group(
+                    1) or "") + " " + (match_attr_and_value.group(2) or "")
+        command = method + " " + classname + " " + uid + " " + attr_and_value
+        self.onecmd(command)
+        return command
 
     def do_EOF(self, line):
         """End of file to exit the program"""
@@ -96,6 +132,20 @@ class HBNBcommand(cmd.Cmd):
             new_list = [str(obj) for key, obj in storage.all().items()]
             print(new_list)
 
+    def do_count(self, line):
+        """Counts the instances of a class.
+        """
+        words = line.split(' ')
+        if not words[0]:
+            print("** class name missing **")
+        elif words[0] not in storage.classes():
+            print("** class doesn't exist **")
+        else:
+            matches = [
+                k for k in storage.all() if k.startswith(
+                    words[0] + '.')]
+            print(len(matches))
+
     def do_update(self, line):
         """Updates an instance by adding or updating attribute.
         """
@@ -139,41 +189,9 @@ class HBNBcommand(cmd.Cmd):
                     try:
                         value = cast(value)
                     except ValueError:
-                        pass  # fine, stay a string then
+                        pass  
                 setattr(storage.all()[key], attribute, value)
                 storage.all()[key].save()
-
-    def precmd(self, line):
-        # make the app work non-interactively
-        if not sys.stdin.isatty():
-            print()
-
-        checks = re.search(r"^(\w*)\.(\w+)(?:\(([^)]*)\))$", line)
-        if checks:
-            class_name = checks.group(1)
-            command = checks.group(2)
-            args = checks.group(3)
-
-            if args is None:
-                line = f"{command} {class_name}"
-                return ''
-            else:
-                # print(args)
-                args_checks = re.search(r"^\"([^\"]*)\"(?:, (.*))?$", args)
-                # print(args_checks.group(1), args_checks.group(2))
-                instance_id = args_checks[1]
-
-                if args_checks.group(2) is None:
-                    line = f"{command} {class_name} {instance_id}"
-                else:
-                    attribute_part = args_checks.group(2)
-                    # print(attribute_part)
-                    line = f"{command} {class_name} {instance_id} \
-{attribute_part}"
-                return ''
-
-        return cmd.Cmd.precmd(self, line)
-        # return ''
 
 
 if __name__ == '__main__':
