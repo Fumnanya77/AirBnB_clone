@@ -1,0 +1,9 @@
+/* styles for the footer */
+footer {
+	color: #00FF00;
+	height: 60px;
+	width: 100%;
+	border-top: 1px #CCCCCC;
+	position: absolute;
+	bottom: 0;
+}
