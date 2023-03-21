@@ -1,0 +1,16 @@
+/* style sheet for header */
+header {
+	background-color : #FFFFFF;
+	height : 70px;
+	width : 100%;
+	border-bottom : 1px solid #CCCCCC;
+	background-image : url(../images/logo.png);
+	background-repeat : no-repeat;
+}
+
+@media only screens and (max-width : 500px){
+	header {
+		height : 50px;
+		background-image-size : 60%;
+	}
+}
